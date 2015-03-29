@@ -89,8 +89,8 @@ module.exports = function(RED) {
             
             // Get a Moment.JS date/time - NB: the result might not be
             //  valid since the input might not parse as a date/time
-            if (formatInput) {
-                var mDT = moment(inp, formatInput);
+            if (node.formatInput) {
+                var mDT = moment(inp, node.formatInput);
             } else {
                 var mDT = moment(inp);
             }
