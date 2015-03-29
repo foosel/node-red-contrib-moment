@@ -34,7 +34,8 @@ module.exports = function(RED) {
         // Store local copies of the node configuration (as defined in the .html)
         this.topic = n.topic;
         this.input = n.input;
-        this.format = n.format;
+        this.formatInput = n.formatInput;
+        this.formatOutput = n.formatOutput;
         this.output = n.output;
 
         // copy "this" object in case we need it in context of callbacks of other functions.
@@ -88,7 +89,12 @@ module.exports = function(RED) {
             
             // Get a Moment.JS date/time - NB: the result might not be
             //  valid since the input might not parse as a date/time
-            var mDT = moment(inp);
+            if (formatInput) {
+                var mDT = moment(inp, formatInput);
+            } else {
+                var mDT = moment(inp);
+            }
+
             // Check if the input is a date?
             if ( ! mDT.isValid() ) {
                 node.warn('The input property was NOT a recognisable date. Output will be a blank string');
@@ -99,7 +105,7 @@ module.exports = function(RED) {
                 
                 // If format not set, assume ISO8601 string if input is a Date otherwise assume Date
                 
-                if ( node.format === '' ) {
+                if ( node.formatOutput === '' ) {
                     // Is the input a JS Date object? If so, output a string
                     // Is it a number (Inject outputs a TIMESTAMP which is a number), also output a string
                     if ( moment.isDate(inp) || Object.prototype.toString.call(inp) === '[object Number]') {
@@ -107,20 +113,20 @@ module.exports = function(RED) {
                     } else {                    // otherwise, output a Date object
                         eval('msg.' + node.output + ' = mDT.toDate(); '); // SEE REASONS ABOVE! msg[node.output] = mDT.toDate();
                     }
-                } else if ( node.format.toUpperCase() === 'ISO8601'  || node.format.toLowerCase() === 'iso' ) {
+                } else if ( node.formatOutput.toUpperCase() === 'ISO8601'  || node.formatOutput.toLowerCase() === 'iso' ) {
                     eval('msg.' + node.output + ' = mDT.toISOString(); '); // SEE REASONS ABOVE! msg[node.output] = mDT.toISOString();
-                } else if ( node.format.toLowerCase() === 'fromnow' || node.format.toLowerCase() === 'timeago' ) {
+                } else if ( node.formatOutput.toLowerCase() === 'fromnow' || node.formatOutput.toLowerCase() === 'timeago' ) {
                     // We are also going to handle time-from-now (AKA time ago) format
                     eval('msg.' + node.output + ' = mDT.fromNow(); '); // SEE REASONS ABOVE! msg[node.output] = mDT.fromNow();
-                } else if ( node.format.toLowerCase() === 'calendar' || node.format.toLowerCase() === 'aroundnow' ) {
+                } else if ( node.formatOutput.toLowerCase() === 'calendar' || node.formatOutput.toLowerCase() === 'aroundnow' ) {
                     // We are also going to handle calendar format (AKA around now)
                     eval('msg.' + node.output + ' = mDT.calendar(); '); // SEE REASONS ABOVE! msg[node.output] = mDT.calendar();
-                } else if ( node.format.toLowerCase() === 'date' || node.format.toLowerCase() === 'jsdate' ) {
+                } else if ( node.formatOutput.toLowerCase() === 'date' || node.formatOutput.toLowerCase() === 'jsdate' ) {
                     // we also allow output as a Javascript Date object
                     eval('msg.' + node.output + ' = mDT.toDate(); '); // SEE REASONS ABOVE! msg[node.output] = mDT.toDate();
                 } else {
                     // or we assume it is a valid format definition ...
-                    eval('msg.' + node.output + ' = mDT.format(node.format); '); // SEE REASONS ABOVE! msg[node.output] = mDT.format(node.format);
+                    eval('msg.' + node.output + ' = mDT.format(node.formatOutput); '); // SEE REASONS ABOVE! msg[node.output] = mDT.format(node.formatOutput);
                 }
             }
             

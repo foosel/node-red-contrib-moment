@@ -53,10 +53,15 @@
         <label for="node-input-input"><i class="fa fa-arrow-left"></i> Input <i>msg.</i></label>
         <input type="text" id="node-input-input" style="width: 53%;" placeholder="payload">
     </div>
-    <!-- Format String -->
+    <!-- Input Format String -->
     <div class="form-row">
-        <label for="node-input-format"><i class="fa fa-eye-open"></i> Format</label>
-        <input type="text" id="node-input-format" placeholder="ISO8601 or Date Object">
+        <label for="node-input-formatInput"><i class="fa fa-eye-open"></i> Format</label>
+        <input type="text" id="node-input-formatInput">
+    </div>
+    <!-- Output Format String -->
+    <div class="form-row">
+        <label for="node-input-formatOutput"><i class="fa fa-eye-open"></i> Format</label>
+        <input type="text" id="node-input-formatOutput" placeholder="ISO8601 or Date Object">
     </div>
     <div class="form-tips">
         Default output format is ISO8601 if the input is a Date object and is a Date object if the input is a string.
@@ -91,7 +96,8 @@
         <b>Output</b> is a formatted string or a Date object on <b>msg.payload</b> by default, change by setting the output field.
     </p>
     <p>Also adds msg.topic if specified otherwise passes it through.</p>
-    <p><b>Format</b> may be any <a href="http://momentjs.com/docs/#/displaying/format/">format string allowed by Moment.JS</a><br>
+    <p><b>Input Format</b> may be any <a href="http://momentjs.com/docs/#/parsing/string-format/">input format string allowed by Moment.JS</a><br>
+    <p><b>Output Format</b> may be any <a href="http://momentjs.com/docs/#/displaying/format/">output format string allowed by Moment.JS</a><br>
     or one of the following (not case sensitive, alternatives in brackets):</p>
     <dl>
         <dt>If left blank</dt>
@@ -116,7 +122,8 @@
             name: {value:""},     //  along with default values.
             topic: {value:""},    //, required:true}
             input: {value:"payload"},
-            format: {value:""},
+            formatInput: {value:""},
+            formatOutput: {value:""},
             output: {value:"payload"}
         },
         inputs:1,               // set the number of inputs - only 0 or 1
