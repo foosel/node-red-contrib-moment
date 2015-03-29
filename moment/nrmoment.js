@@ -73,11 +73,16 @@ module.exports = function(RED) {
             // or make sure that the node's input property actually exists on the input msg
             var inp = '';
             if ( node.input !== '' ) {
-                if ( node.input in msg ) {
-                    // It is so grab it
-                    inp = msg[node.input];
-                } else {
-                    node.warn('Input property, ' + node.input + ', does NOT exist in the input msg. Output has been set to NOW.');
+                var parts = node.input.trim().split("\.");
+                inp = msg;
+                
+                for (var i = 0; i < parts.length; i++) {
+                    if ( parts[i] in inp ) {
+                        inp = inp[parts[i]];
+                    } else {
+                        node.warn('Input property, ' + node.input + ', does NOT exist in the input msg. Output will be set to NOW.');
+                        inp = '';
+                    }
                 }
             }
             // If inp is a blank string, set it to a Date object with Now DT
@@ -89,7 +94,7 @@ module.exports = function(RED) {
             
             // Get a Moment.JS date/time - NB: the result might not be
             //  valid since the input might not parse as a date/time
-            if (node.formatInput) {
+            if (node.formatInput && typeof inp == "string") {
                 var mDT = moment(inp, node.formatInput);
             } else {
                 var mDT = moment(inp);
