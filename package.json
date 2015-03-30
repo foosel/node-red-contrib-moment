@@ -3,7 +3,8 @@
   "version": "1.0.3",
   "description": "Node-Red Node that produces a nicely formatted Date/Time string using the Moment.JS library.",
   "dependencies": {
-    "moment": "2.x"
+    "moment": "2.x",
+    "moment-timezone": "0.3.x"
   },
   "author" : {
     "name" : "Julian Knight",

@@ -36,6 +36,7 @@ module.exports = function(RED) {
         this.input = n.input;
         this.formatInput = n.formatInput;
         this.formatOutput = n.formatOutput;
+        this.timezoneOutput = n.timezoneOutput;
         this.output = n.output;
 
         // copy "this" object in case we need it in context of callbacks of other functions.
@@ -98,6 +99,11 @@ module.exports = function(RED) {
                 var mDT = moment(inp, node.formatInput);
             } else {
                 var mDT = moment(inp);
+            }
+
+            // if we also have a timezone defined, convert to that now
+            if (node.timezoneOutput) {
+                mDT = mDT.tz(node.timezoneOutput);
             }
 
             // Check if the input is a date?
